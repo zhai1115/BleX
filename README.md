@@ -33,7 +33,7 @@ allprojects {
 ```
 ### 应用目录gradle文件下配置依赖
 ```
-implementation 'com.github.zhai1115:BleX:1.0.4'
+implementation 'com.github.zhai1115:BleX:1.0.5'
 ```
 
 ### android12 权限适配

@@ -39,7 +39,7 @@ publishing {
         mavenJava(MavenPublication) {
             groupId = 'com.zhaize'
             artifactId = 'blex'
-            version = '1.0.4'
+            version = '1.0.5'
 
             //./gradlew clean
             //./gradlew :blex:assembleRelease
