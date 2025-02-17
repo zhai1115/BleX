@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.util.Log;
 
 import com.eden.blex.BleLog;
 import com.eden.blex.callback.BleStatusCallback;
@@ -72,13 +73,20 @@ public class BluetoothChangedObserver {
                         observer.bleStatusCallback.onBluetoothStatusChanged(false);
                     }
                     //如果正在扫描，则停止扫描
-                    ScanRequest scanRequest = Rproxy.getRequest(ScanRequest.class);
+                    ScanRequest<?> scanRequest = Rproxy.getRequest(ScanRequest.class);
                     if (scanRequest.isScanning()) {
                         scanRequest.onStop();
                     }
                     //解决原生android系统,直接断开系统蓝牙不回调onConnectionStateChange接口问题
-                    ConnectRequest request = Rproxy.getRequest(ConnectRequest.class);
-                    request.closeBluetooth();
+                    try {
+                        //规避部分机型系统的空指针
+                        //NullPointerException: Attempt to invoke virtual method
+                        //'void com.android.bluetooth.gatt.GattNativeInterface.gattClientUnregisterApp(int)' on a null object reference
+                        ConnectRequest<?> request = Rproxy.getRequest(ConnectRequest.class);
+                        request.closeBluetooth();
+                    } catch (Exception e) {
+                        BleLog.e("", "closeBluetooth exception: " + e.getMessage());
+                    }
                 }
             }
         }
